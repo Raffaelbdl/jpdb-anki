@@ -19,7 +19,7 @@ class Note:
         note = Note()
         note.expression = jpdb.find("title").text.split(" ")[0]
         freq = jpdb.find(class_="tag tooltip")
-        note.frequency = int(freq.text.split(" ")[-1]) if freq else 100_000
+        note.frequency = int(freq.text.split(" ")[-1]) if freq else 100000
         note.spelling = spelling.get_spelling(jpdb)
         note.part_of_speech = jpdb.find(class_="part-of-speech").contents[-1].text
         note.meanings = meanings.get_meanings(jpdb)
@@ -27,5 +27,6 @@ class Note:
             note.expression, note.spelling, pitch_dictionary=pitch_dictionary
         )
         note.examples = examples.get_examples(jpdb)
+        note.url = url
 
         return note

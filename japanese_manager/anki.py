@@ -75,7 +75,7 @@ class AnkiNote(genanki.Note):
         part_of_speech = note.part_of_speech
         spelling = note.spelling
         pitch = note.pitch.html if note.pitch else ""
-        frequency = note.frequency
+        frequency = str(note.frequency)
 
         meanings = ""
         for meaning in note.meanings:
