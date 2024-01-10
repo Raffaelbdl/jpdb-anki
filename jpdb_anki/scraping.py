@@ -30,3 +30,24 @@ def get_all_vocab_entries(root_url: str) -> list[str]:
     next_root = jpdb.find(class_="pagination").find_all("a", href=True)[-1]["href"][:-2]
     vocab_entries += get_all_vocab_entries(base_url + next_root)
     return vocab_entries
+
+
+def get_vocab_entry_from_search(expression: str) -> str:
+    search_url = "https://jpdb.io/search?q=" + expression
+    jpdb = load_url(search_url)
+    if jpdb.find(class_="results details"):
+        links = jpdb.find_all("link", href=True)
+        for l in links:
+            if "canonical" in l.attrs["rel"]:
+                return l.attrs["href"].strip("#a")
+    entry = (
+        jpdb.find(class_="results search")
+        .find(class_="view-conjugations-link")
+        .attrs["href"]
+    )
+    return get_base_url(search_url) + entry.strip("#a")
+
+
+if __name__ == "__main__":
+    print(get_vocab_entry_from_search("客観的"))
+    print(get_vocab_entry_from_search("熊"))

@@ -5,8 +5,8 @@ import pickle
 
 import genanki
 
-from japanese_manager.fields import note
-from japanese_manager.scraping import get_all_vocab_entries
+from jpdb_anki.fields import note
+from jpdb_anki.scraping import get_all_vocab_entries
 
 NOTES_DIRECTORY = os.path.join("data", "notes")
 LISTS_DIRECTORY = os.path.join("data", "lists")
@@ -58,6 +58,8 @@ class Database:
         self.load()
 
     def load(self) -> None:
+        os.makedirs(NOTES_DIRECTORY, exist_ok=True)
+        os.makedirs(LISTS_DIRECTORY, exist_ok=True)
         self.notes = {
             note: pathlib.Path(os.path.join(NOTES_DIRECTORY, note))
             for note in os.listdir(NOTES_DIRECTORY)

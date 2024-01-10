@@ -3,7 +3,7 @@ import pathlib
 
 import genanki
 
-from japanese_manager.fields import note
+from jpdb_anki.fields import note
 
 
 FORMAT_DIRECTORY = os.path.join("data", "anki")

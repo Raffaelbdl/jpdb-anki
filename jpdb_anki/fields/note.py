@@ -1,5 +1,5 @@
-from japanese_manager.fields import examples, meanings, pitch, spelling
-from japanese_manager.scraping import load_url
+from jpdb_anki.fields import examples, meanings, pitch, spelling
+from jpdb_anki.scraping import load_url
 
 
 class Note:
