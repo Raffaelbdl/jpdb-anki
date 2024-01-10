@@ -162,3 +162,4 @@ cython_debug/
 data/notes/
 data/lists/
 data/deck_id
+output.apkg

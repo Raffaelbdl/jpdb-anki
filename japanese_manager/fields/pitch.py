@@ -219,23 +219,23 @@ class Pitch:
     __slots__ = ["expression", "spelling", "mora", "html"]
 
     @classmethod
-    def from_expression_and_spelling(
-        cls, expression: str, spelling: str, *, pitch_dictionary: dict | None = None
+    def from_expression_and_reading(
+        cls, expression: str, reading: str, *, pitch_dictionary: dict | None = None
     ):
-        """Creates an instance of Pitch given an expression and spelling"""
+        """Creates an instance of Pitch given an expression and reading"""
         pitch = Pitch()
         pitch.expression = expression
-        pitch.spelling = spelling
-        pitch.mora = hira_to_mora(spelling)
+        pitch.spelling = reading
+        pitch.mora = hira_to_mora(reading)
 
         pitch_dictionary = (
             pitch_dictionary if pitch_dictionary else load_pitch_dictionary()
         )
         try:
-            pitch_position = get_pitch_position(pitch_dictionary, expression, spelling)
+            pitch_position = get_pitch_position(pitch_dictionary, expression, reading)
         except KeyError:
             return None
 
         pitch_pattern = pitch_position_to_pattern(pitch.mora, pitch_position)
-        pitch.html = pitch_svg(spelling, pitch_pattern)
+        pitch.html = pitch_svg(reading, pitch_pattern)
         return pitch
