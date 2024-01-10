@@ -4,7 +4,9 @@ import pathlib
 import pickle
 
 import genanki
+from tqdm import tqdm
 
+from jpdb_anki.anki import AnkiNote
 from jpdb_anki.fields import note
 from jpdb_anki.scraping import get_all_vocab_entries
 
@@ -106,3 +108,26 @@ class Database:
         print("List", key, " created.")
 
         return vocab
+
+    def write_apkg_from_db(self, filepath: str) -> None:
+        """Writes the apkg file with all the current notes.
+
+        Args:
+            filepath: A string path to the wanted apkg file location.
+        """
+        return self.write_apkg_from_list(filepath, self.notes)
+
+    def write_apkg_from_list(self, filepath: str, urls: list[str]) -> None:
+        """Writes the apkg file from a list of vocabulary entries.
+
+        This is also compatible with a list of expressions.
+
+        Args:
+            urls: A list of vocabulary entries.
+        """
+        deck = genanki.Deck(self.deck_id, "Python deck")
+        for e in tqdm(urls, desc="Generating Package."):
+            deck.add_note(AnkiNote.from_note(self.get_note(e), model=self.model))
+        genanki.Package(deck).write_to_file(filepath)
+
+        print("APKG successfully generated.")

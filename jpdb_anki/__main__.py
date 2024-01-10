@@ -1,11 +1,25 @@
-import os
+"""Command line tasks.
+
+Three tasks are currently available:
+
+- scraping: `python -m jpdb_anki -t scrape -vl $vocabulary-list-url
+    Scrapes a vocabulary list from JPDB and creates an APKG file
+    that can be imported into Anki.
+
+- generating: `python -m jpdb_anki -t generate
+    Loads saved notes and creates and APKG file that can be imported 
+    into Anki.
+
+- search: `python -m jpdb_anki -t search -e $expression
+    Creates a note for an expression by searching JPDB.
+    In the case of multiple search results from JPDB, the most 
+    used word will be selected.
+"""
 
 from absl import flags, app
-import genanki
-from tqdm import tqdm
 
-from jpdb_anki.anki import AnkiNote, load_model
-from jpdb_anki.database import Database, NOTES_DIRECTORY
+from jpdb_anki.anki import load_model
+from jpdb_anki.database import Database
 from jpdb_anki.fields import pitch
 from jpdb_anki.scraping import get_vocab_entry_from_search
 
@@ -29,43 +43,18 @@ flags.DEFINE_string(
 FLAGS = flags.FLAGS
 
 
-def make_package_from_vocabulary_list(url: str) -> None:
-    db = Database(pitch_dictionary=pitch.load_pitch_dictionary(), model=load_model())
-
-    vocab_entries = db.get_list(url)
-
-    deck = genanki.Deck(db.deck_id, "Python deck")
-    for e in tqdm(vocab_entries, desc="Creating notes"):
-        deck.add_note(AnkiNote.from_note(db.get_note(e), model=db.model))
-
-    genanki.Package(deck).write_to_file("output.apkg")
-
-
-def generate_apkg() -> None:
-    db = Database(pitch_dictionary=pitch.load_pitch_dictionary(), model=load_model())
-
-    deck = genanki.Deck(db.deck_id, "Python deck")
-    for e in tqdm(os.listdir(NOTES_DIRECTORY), desc="Creating notes"):
-        deck.add_note(AnkiNote.from_note(db.get_note(e), model=db.model))
-
-    genanki.Package(deck).write_to_file("output.apkg")
-    print("APKG successfully generated.")
-
-
-def create_note_from_search(expression: str) -> None:
-    db = Database(pitch_dictionary=pitch.load_pitch_dictionary(), model=load_model())
-    db.get_note(get_vocab_entry_from_search(expression))
-
-    print("Note created for ", expression)
-
-
 def main(_):
+    db = Database(pitch_dictionary=pitch.load_pitch_dictionary(), model=load_model())
+
     if FLAGS.task == "scrape":
-        make_package_from_vocabulary_list(FLAGS.vocablist)
+        vocab_entries = db.get_list(FLAGS.vocablist)
+        db.write_apkg_from_list("output.apkg", vocab_entries)
+
     elif FLAGS.task == "generate":
-        generate_apkg()
+        db.write_apkg("output.apkg")
+
     elif FLAGS.task == "search":
-        create_note_from_search(FLAGS.expression)
+        db.get_note(get_vocab_entry_from_search(FLAGS.expression))
 
 
 if __name__ == "__main__":
