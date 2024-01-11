@@ -52,3 +52,9 @@ This command writes an APKG file with your saved notes.
 ```bash
 python -m jpdb_anki -t generate
 ```
+
+
+## Provided template
+I provide my template. You can change the template in the file `./data/anki/`.
+
+![kuma](./resources/kuma.png)
