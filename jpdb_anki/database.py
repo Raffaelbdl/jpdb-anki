@@ -5,6 +5,7 @@ import pickle
 
 import genanki
 from tqdm import tqdm
+import yaml
 
 from jpdb_anki.anki import AnkiNote
 from jpdb_anki.fields import note
@@ -34,6 +35,11 @@ def safe_json_load(path: pathlib.Path):
         return json.load(file)
 
 
+def safe_yaml_load(path: pathlib.Path):
+    with path.open("r") as file:
+        return yaml.load(file, yaml.SafeLoader)
+
+
 def list_key(url: str) -> str:
     tmp = url.split("/")
     return tmp[-2] + "_" + tmp[-1]
@@ -55,7 +61,7 @@ class Database:
     ) -> None:
         self.pitch_dictionary = pitch_dictionary
         self.model = model
-        self.deck_id = 1294895494
+        self.deck_id = safe_yaml_load(pathlib.Path("./config.yaml"))["deck_id"]
 
         self.load()
 

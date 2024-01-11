@@ -51,7 +51,7 @@ def main(_):
         db.write_apkg_from_list("output.apkg", vocab_entries)
 
     elif FLAGS.task == "generate":
-        db.write_apkg("output.apkg")
+        db.write_apkg_from_db("output.apkg")
 
     elif FLAGS.task == "search":
         db.get_note(get_vocab_entry_from_search(FLAGS.expression))

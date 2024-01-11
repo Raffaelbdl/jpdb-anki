@@ -3,3 +3,4 @@ beautifulsoup4
 git+https://github.com/kerrickstaley/genanki
 tqdm
 absl-py
+pyyaml
