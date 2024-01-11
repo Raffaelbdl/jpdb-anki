@@ -55,6 +55,6 @@ python -m jpdb_anki -t generate
 
 
 ## Provided template
-I provide my template. You can change the template in the file `./data/anki/`.
+I provide my template. You can change the template in the directory `./data/anki/`.
 
 ![kuma](./resources/kuma.png)
