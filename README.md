@@ -6,12 +6,26 @@
 [**Installation**](#installation) 
 | [**Example Usage**](#example-usage)
 
+This project helps creating Anki note from the website [JPDB](https://jpdb.io/).
+
 ## Installation
 This package requires Python 3.10 or later.
 
+First clone the project:
+```bash
+git clone https://github.com/Raffaelbdl/jpdb-anki
+cd jpdb-anki
+```
+
+Then install the Python requirements. I recommend using a virtual envrionment.
 ```bash
 pip install --upgrade pip
 pip install -r requirements.txt
+```
+
+Create a `config.json` file with a deck id. Use `import random; random.randrange(1 << 30, 1 << 31)` to generate an ID.
+```yaml
+deck_id: 1294895494
 ```
 
 ## Example Usage
