@@ -16,7 +16,7 @@
 <label class="btn" for="mean" id="testid"><font color="black">Meanings</font><p class="meanings" id="card">{{Meanings}}</p></label>
 
 <input type="checkbox" id="example">
-<label class="btn" for="example" id="testid"><font color="black">Examples</font><p class="examples" id="card">{{Examples}}</p></label>
+<label class="btn" for="example" id="testid"><font color="black">Examples</font><p class="examples" id="card" lang="ja">{{Examples}}</p></label>
 
 <div class=smallEnglish></div>
 
