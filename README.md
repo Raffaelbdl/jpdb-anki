@@ -23,7 +23,7 @@ pip install --upgrade pip
 pip install -r requirements.txt
 ```
 
-Create a `config.json` file with a deck id. Use `import random; random.randrange(1 << 30, 1 << 31)` to generate an ID.
+Create a `config.yaml` file with a deck id. Use `import random; random.randrange(1 << 30, 1 << 31)` to generate an ID.
 ```yaml
 deck_id: 1294895494
 ```
