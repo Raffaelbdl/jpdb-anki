@@ -4,3 +4,5 @@ git+https://github.com/kerrickstaley/genanki
 tqdm
 absl-py
 pyyaml
+ginza 
+ja_ginza
