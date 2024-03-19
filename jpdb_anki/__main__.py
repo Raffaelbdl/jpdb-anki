@@ -27,7 +27,7 @@ from jpdb_anki.scraping import get_vocab_entry_from_search
 flags.DEFINE_enum(
     "task",
     "scrape",
-    ["generate", "scrape", "search"],
+    ["generate", "scrape", "search", "parse"],
     "Select task to perform.",
     short_name="t",
 )
@@ -40,6 +40,7 @@ flags.DEFINE_string(
 flags.DEFINE_string(
     "expression", None, "Expression to search to create a note.", short_name="e"
 )
+flags.DEFINE_string("text", None, "Path to a text file.", short_name="txt")
 FLAGS = flags.FLAGS
 
 
@@ -55,6 +56,11 @@ def main(_):
 
     elif FLAGS.task == "search":
         db.get_note(get_vocab_entry_from_search(FLAGS.expression))
+        print("Note successfully generated.")
+
+    elif FLAGS.task == "parse":
+        db.write_apkg_from_text("output.apkg", FLAGS.text)
+        print(f"APKG for {FLAGS.text} successfully generated.")
 
 
 if __name__ == "__main__":
