@@ -53,6 +53,16 @@ This command writes an APKG file with your saved notes.
 python -m jpdb_anki -t generate
 ```
 
+### Generate an APKG file from a text file
+
+This command writes an APKG file by parsing a text file.
+
+First, create a text file, for instance `example.txt` and dump the text you want to parse in it.
+Then use the next command to generate the APKG:
+
+```bash
+python -m jpdb_anki -t parse -txt example.txt
+```
 
 ## Provided template
 I provide my template. You can change the template in the directory `./data/anki/`.

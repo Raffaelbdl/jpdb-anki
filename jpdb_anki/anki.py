@@ -72,7 +72,10 @@ class AnkiNote(genanki.Note):
     @classmethod
     def from_note(cls, note: note.Note, *, model: genanki.Model | None = None):
         expression = note.expression
-        part_of_speech = note.part_of_speech
+        try:
+            part_of_speech = note.part_of_speech
+        except AttributeError:
+            part_of_speech = ""
         spelling = note.spelling
         pitch = note.pitch.html if note.pitch else ""
         frequency = str(note.frequency)
