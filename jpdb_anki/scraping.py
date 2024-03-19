@@ -1,7 +1,7 @@
-from urllib.parse import urlparse, urljoin
-
 from bs4 import BeautifulSoup
 import requests
+import spacy
+from tqdm import tqdm
 
 
 def load_url(url: str) -> BeautifulSoup:
@@ -27,6 +27,12 @@ def get_all_vocab_entries(root_url: str) -> list[str]:
     if jpdb.find(class_="pagination without-next"):
         return vocab_entries
 
+    without_prev = jpdb.find(class_="pagination without-prev")
+    if without_prev:
+        next_root = without_prev.find_all("a", href=True)[-1]["href"][:-2]
+        vocab_entries += get_all_vocab_entries(base_url + next_root)
+        return vocab_entries
+
     next_root = jpdb.find(class_="pagination").find_all("a", href=True)[-1]["href"][:-2]
     vocab_entries += get_all_vocab_entries(base_url + next_root)
     return vocab_entries
@@ -48,6 +54,20 @@ def get_vocab_entry_from_search(expression: str) -> str:
     return get_base_url(search_url) + entry.strip("#a")
 
 
-if __name__ == "__main__":
-    print(get_vocab_entry_from_search("客観的"))
-    print(get_vocab_entry_from_search("熊"))
+def get_vocab_entries_from_text(text: str) -> list[str]:
+    tokenized = spacy.load("ja_ginza")(text)
+    seen_tokens = set()
+    vocab_entries = []
+
+    for i, sent in enumerate(tokenized.sents):
+        for token in tqdm(sent, f"Searching expressions for sentence {i}."):
+            if token.norm_ in seen_tokens:
+                continue
+            seen_tokens.add(token.norm_)
+
+            try:
+                vocab_entries.append(get_vocab_entry_from_search(token.norm_))
+            except AttributeError:
+                continue
+
+    return vocab_entries
