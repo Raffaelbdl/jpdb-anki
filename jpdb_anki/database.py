@@ -9,7 +9,7 @@ import yaml
 
 from jpdb_anki.anki import AnkiNote
 from jpdb_anki.fields import note
-from jpdb_anki.scraping import get_all_vocab_entries
+from jpdb_anki.scraping import get_all_vocab_entries, get_vocab_entries_from_text
 
 NOTES_DIRECTORY = os.path.join("data", "notes")
 LISTS_DIRECTORY = os.path.join("data", "lists")
@@ -129,6 +129,7 @@ class Database:
         This is also compatible with a list of expressions.
 
         Args:
+            filepath: A string path to the wanted apkg file location.
             urls: A list of vocabulary entries.
         """
         deck = genanki.Deck(self.deck_id, "Python deck")
@@ -137,3 +138,15 @@ class Database:
         genanki.Package(deck).write_to_file(filepath)
 
         print("APKG successfully generated.")
+
+    def write_apkg_from_text(self, filepath: str, textpath: str) -> None:
+        """Writes the apkg file with all the words in a given text.
+
+        Args:
+            filepath: A string path to the wanted apkg file location.
+            textpath: A string path to the text to parse.
+        """
+        with open(textpath, "r") as file:
+            text = file.read()
+        vocab_entries = get_vocab_entries_from_text(text)
+        self.write_apkg_from_list(filepath, vocab_entries)
