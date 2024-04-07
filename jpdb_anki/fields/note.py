@@ -27,7 +27,12 @@ class Note:
         freq = jpdb.find(class_="tag tooltip")
         note.frequency = int(freq.text.split(" ")[-1]) if freq else 100000
         note.spelling = spelling.get_spelling(jpdb)
-        note.part_of_speech = jpdb.find(class_="part-of-speech").contents[-1].text
+
+        part_of_speech = ""
+        for speech in jpdb.find(class_="part-of-speech").contents:
+            part_of_speech += speech.text + "\n"
+        note.part_of_speech = part_of_speech
+
         note.meanings = meanings.get_meanings(jpdb)
         note.pitch = pitch.Pitch.from_expression_and_reading(
             note.expression, note.reading, pitch_dictionary=pitch_dictionary

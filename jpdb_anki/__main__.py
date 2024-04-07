@@ -41,11 +41,18 @@ flags.DEFINE_string(
     "expression", None, "Expression to search to create a note.", short_name="e"
 )
 flags.DEFINE_string("text", None, "Path to a text file.", short_name="txt")
+flags.DEFINE_boolean(
+    "overwrite",
+    False,
+    "Boolean to overwrite existing notes in database.",
+    short_name="ow",
+)
 FLAGS = flags.FLAGS
 
 
 def main(_):
     db = Database(pitch_dictionary=pitch.load_pitch_dictionary(), model=load_model())
+    db.overwrite = FLAGS.overwrite
 
     if FLAGS.task == "scrape":
         vocab_entries = db.get_list(FLAGS.vocablist)
@@ -55,7 +62,8 @@ def main(_):
         db.write_apkg_from_db("output.apkg")
 
     elif FLAGS.task == "search":
-        db.get_note(get_vocab_entry_from_search(FLAGS.expression))
+        # db.get_note(get_vocab_entry_from_search(FLAGS.expression))
+        db.write_apkg_from_search("output.apkg", FLAGS.expression)
         print("Note successfully generated.")
 
     elif FLAGS.task == "parse":

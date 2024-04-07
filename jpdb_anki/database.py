@@ -9,7 +9,11 @@ import yaml
 
 from jpdb_anki.anki import AnkiNote
 from jpdb_anki.fields import note
-from jpdb_anki.scraping import get_all_vocab_entries, get_vocab_entries_from_text
+from jpdb_anki.scraping import (
+    get_all_vocab_entries,
+    get_vocab_entries_from_text,
+    get_vocab_entry_from_search,
+)
 
 NOTES_DIRECTORY = os.path.join("data", "notes")
 LISTS_DIRECTORY = os.path.join("data", "lists")
@@ -63,6 +67,8 @@ class Database:
         self.model = model
         self.deck_id = safe_yaml_load(pathlib.Path("./config.yaml"))["deck_id"]
 
+        self.overwrite = False
+
         self.load()
 
     def load(self) -> None:
@@ -78,7 +84,7 @@ class Database:
         }
 
     def contains_note(self, key: str) -> bool:
-        return key in self.notes
+        return key in self.notes and not self.overwrite
 
     def contains_list(self, key: str) -> bool:
         return key in self.lists
@@ -150,3 +156,14 @@ class Database:
             text = file.read()
         vocab_entries = get_vocab_entries_from_text(text)
         self.write_apkg_from_list(filepath, vocab_entries)
+
+    def write_apkg_from_search(self, filepath: str, expression: str) -> None:
+        deck = genanki.Deck(self.deck_id, "Python deck")
+        deck.add_note(
+            AnkiNote.from_note(
+                self.get_note(get_vocab_entry_from_search(expression)), model=self.model
+            )
+        )
+        genanki.Package(deck).write_to_file(filepath)
+
+        print("APKG successfully generated.")
