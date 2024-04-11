@@ -3,6 +3,8 @@
 ![Python Version](https://img.shields.io/badge/Python->=3.10-blue)
 ![Code Style](https://img.shields.io/badge/Code_Style-black-black)
 
+An add-on in development is available here: [https://github.com/Raffaelbdl/kuma-browser](https://github.com/Raffaelbdl/kuma-browser).
+
 [**Installation**](#installation) 
 | [**Example Usage**](#example-usage)
 
