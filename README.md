@@ -1,4 +1,4 @@
-# JPDB Anki Note Creator
+# JPDB Anki Note Creator (Not updated!)
 
 ![Python Version](https://img.shields.io/badge/Python->=3.10-blue)
 ![Code Style](https://img.shields.io/badge/Code_Style-black-black)
